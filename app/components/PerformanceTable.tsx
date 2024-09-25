@@ -1,37 +1,58 @@
-type TeamMember = {
-  name: string;
-  sales: number;
-  collections: number;
-  target: number;
-};
+"use client";
 
-type Props = {
-  team: TeamMember[];
-};
+import React, { useEffect, useState } from "react";
 
-export default function PerformanceTable({ team }: Props) {
+const PerformanceTable = () => {
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const response = await fetch("/data.json");
+      const jsonData = await response.json();
+      setData(jsonData);
+    };
+
+    loadData();
+  }, []);
+
   return (
-    <div className="overflow-x-auto mb-8">
-      <table className="min-w-full table-auto">
-        <thead>
-          <tr>
-            <th className="px-4 py-2">Nome</th>
-            <th className="px-4 py-2">Vendas</th>
-            <th className="px-4 py-2">Cobranças</th>
-            <th className="px-4 py-2">Meta</th>
+    <div>
+      <h2>Tabela de Vendas e Cobranças</h2>
+      <table className="min-w-full border-collapse block md:table">
+        <thead className="block md:table-header-group">
+          <tr className="border border-gray-300 md:border-none block md:table-row">
+            <th className="bg-gray-100 p-2 border border-gray-300 md:border-none">
+              Nome
+            </th>
+            <th className="bg-gray-100 p-2 border border-gray-300 md:border-none">
+              Vendas
+            </th>
+            <th className="bg-gray-100 p-2 border border-gray-300 md:border-none">
+              Cobranças
+            </th>
           </tr>
         </thead>
-        <tbody>
-          {team.map((member, index) => (
-            <tr key={index} className="bg-gray-100">
-              <td className="border px-4 py-2">{member.name}</td>
-              <td className="border px-4 py-2">{member.sales}</td>
-              <td className="border px-4 py-2">{member.collections}</td>
-              <td className="border px-4 py-2">{member.target}</td>
+        <tbody className="block md:table-row-group">
+          {data.map((item) => (
+            <tr
+              key={item.id}
+              className="border border-gray-300 md:border-none block md:table-row"
+            >
+              <td className="p-2 border border-gray-300 md:border-none">
+                {item.nome}
+              </td>
+              <td className="p-2 border border-gray-300 md:border-none">
+                {item.vendas}
+              </td>
+              <td className="p-2 border border-gray-300 md:border-none">
+                {item.cobranças}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-}
+};
+
+export default PerformanceTable;

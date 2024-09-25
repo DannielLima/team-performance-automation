@@ -1,6 +1,7 @@
 "use client";
 
-import { Bar } from "react-chartjs-2";
+import React, { useEffect, useState } from "react";
+import { Chart } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,51 +21,60 @@ ChartJS.register(
   Legend
 );
 
-type TeamMember = {
-  name: string;
-  sales: number;
-  collections: number;
-  target: number;
-};
+const PerformanceChart = () => {
+  const [data, setData] = useState<any[]>([]);
 
-type Props = {
-  team: TeamMember[];
-};
+  useEffect(() => {
+    const loadData = async () => {
+      const response = await fetch("/data.json");
+      const jsonData = await response.json();
+      setData(jsonData);
+    };
 
-export default function PerformanceChart({ team }: Props) {
-  const data = {
-    labels: team.map((member) => member.name),
+    loadData();
+  }, []);
+
+  const chartData = {
+    labels: data.map((item) => item.nome),
     datasets: [
       {
         label: "Vendas",
-        data: team.map((member) => member.sales),
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        data: data.map((item) => item.vendas),
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
       },
       {
         label: "Cobranças",
-        data: team.map((member) => member.collections),
-        backgroundColor: "rgba(153, 102, 255, 0.6)",
-      },
-      {
-        label: "Meta",
-        data: team.map((member) => member.target),
-        backgroundColor: "rgba(255, 159, 64, 0.6)",
+        data: data.map((item) => item.cobranças),
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
       },
     ],
   };
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Desempenho da Equipe",
-      },
-    },
-  };
+  return (
+    <div>
+      <h2>Gráfico de Vendas e Cobranças</h2>
+      <Chart
+        type="bar"
+        data={chartData}
+        options={{
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "top",
+            },
+            title: {
+              display: true,
+              text: "Desempenho de Vendas e Cobranças",
+            },
+          },
+        }}
+      />
+    </div>
+  );
+};
 
-  return <Bar data={data} options={options} />;
-}
+export default PerformanceChart;

@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export default function RootLayout({
   children,
 }: {
@@ -5,7 +7,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head />
+      <head>
+        <title>Análise de Desempenho</title>
+        <meta name="description" content="" />
+      </head>
       <body className="bg-gray-100 text-gray-900">{children}</body>
     </html>
   );
