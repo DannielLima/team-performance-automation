@@ -1,56 +1,46 @@
+// app/components/PerformanceTable.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { motion } from "framer-motion";
 
 const PerformanceTable = () => {
-  const [data, setData] = useState<any[]>([]);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const response = await fetch("/data.json");
-      const jsonData = await response.json();
-      setData(jsonData);
-    };
-
-    loadData();
-  }, []);
+  const data = [
+    { id: 1, nome: "João", vendas: 150, cobranças: 75 },
+    { id: 2, nome: "Maria", vendas: 200, cobranças: 50 },
+    { id: 3, nome: "Pedro", vendas: 100, cobranças: 100 },
+  ];
 
   return (
-    <div>
-      <h2>Tabela de Vendas e Cobranças</h2>
-      <table className="min-w-full border-collapse block md:table">
-        <thead className="block md:table-header-group">
-          <tr className="border border-gray-300 md:border-none block md:table-row">
-            <th className="bg-gray-100 p-2 border border-gray-300 md:border-none">
-              Nome
-            </th>
-            <th className="bg-gray-100 p-2 border border-gray-300 md:border-none">
-              Vendas
-            </th>
-            <th className="bg-gray-100 p-2 border border-gray-300 md:border-none">
-              Cobranças
-            </th>
-          </tr>
-        </thead>
-        <tbody className="block md:table-row-group">
-          {data.map((item) => (
-            <tr
-              key={item.id}
-              className="border border-gray-300 md:border-none block md:table-row"
-            >
-              <td className="p-2 border border-gray-300 md:border-none">
-                {item.nome}
-              </td>
-              <td className="p-2 border border-gray-300 md:border-none">
-                {item.vendas}
-              </td>
-              <td className="p-2 border border-gray-300 md:border-none">
-                {item.cobranças}
-              </td>
+    <div className="p-4 bg-gray-100 rounded-lg">
+      <h2 className="text-2xl font-semibold mb-4">Tabela de Desempenho</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full table-auto">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-2 text-left">Nome</th>
+              <th className="px-4 py-2 text-left">Vendas</th>
+              <th className="px-4 py-2 text-left">Cobranças</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((item) => (
+              <motion.tr
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="hover:bg-gray-100"
+              >
+                <td className="border px-4 py-2">{item.nome}</td>
+                <td className="border px-4 py-2">{item.vendas}</td>
+                <td className="border px-4 py-2">{item.cobranças}</td>
+              </motion.tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

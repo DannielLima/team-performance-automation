@@ -55,24 +55,27 @@ const PerformanceChart = () => {
   };
 
   return (
-    <div>
-      <h2>Gráfico de Vendas e Cobranças</h2>
-      <Chart
-        type="bar"
-        data={chartData}
-        options={{
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top",
+    <div className="p-4 bg-gray-100 rounded-lg">
+      <h2 className="text-2xl font-semibold mb-4 text-center">Gráfico de Vendas e Cobranças</h2>
+      <div className="chart-container">
+        <Chart
+          type="bar"
+          data={chartData}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "Desempenho de Vendas e Cobranças",
+              },
             },
-            title: {
-              display: true,
-              text: "Desempenho de Vendas e Cobranças",
-            },
-          },
-        }}
-      />
+          }}
+        />
+      </div>
     </div>
   );
 };
